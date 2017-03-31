@@ -1,0 +1,23 @@
+{
+  "name": "liquidsoft/render",
+  "description": "Lightweight PHP Renderer",
+  "version": "1.0.0",
+  "type": "library",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Robert Ontiu",
+      "email": "ontiu.robert@gmail.com"
+    }
+  ],
+  "minimum-stability": "stable",
+  "require": {},
+  "autoload": {
+    "files": [
+      "src/functions.php"
+    ],
+    "psr-4": {
+      "LiquidSoft\\Render\\": "src/"
+    }
+  }
+}
