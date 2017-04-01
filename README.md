@@ -19,7 +19,7 @@ render()->setOptions([
 ]);
 ```
 
-## Render a view
+## Rendering a view
 **render(string $view, array $arguments = [])**
 
 The views can be renderer anywhere in the response and can be nested.
@@ -45,6 +45,21 @@ render('partials.header.brand', ['title' => 'My awesome site']);
 // partials/header/brand.php
 echo argument('title'); // Output 'My awesome site'
 echo argument('tagline'); // Output 'Welcome'
+```
+
+## Setting an argument
+**argument()->set(string $query, $value)**
+
+```php
+argument()->set('title' => 'My site')
+```
+
+## Checking if an argument exists
+**argument()->has(string $query)**
+```php
+if (argument()->has('title')) {
+    //...
+}
 ```
 
 ## Extending a view

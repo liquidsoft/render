@@ -1,6 +1,7 @@
 <?php
 
 use LiquidSoft\Render\RenderService;
+use LiquidSoft\Render\ArgumentService;
 
 if (!function_exists('render')) {
     /**
@@ -20,12 +21,16 @@ if (!function_exists('render')) {
 
 if (!function_exists('argument')) {
     /**
-     * @param string $query
-     * @param mixed $default
-     * @return mixed
+     * @param string|null $query
+     * @param null $default
+     * @return ArgumentService|mixed
      */
-    function argument(string $query, $default = null)
+    function argument(string $query = null, $default = null)
     {
-        return RenderService::getInstance()->argument($query, $default);
+        if (count(func_get_args()) === 0) {
+            return ArgumentService::getInstance();
+        }
+
+        return ArgumentService::getInstance()->get($query, $default);
     }
 }

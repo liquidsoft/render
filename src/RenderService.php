@@ -2,8 +2,11 @@
 
 namespace LiquidSoft\Render;
 
+use LiquidSoft\Render\Support\Singleton;
+
 class RenderService
 {
+    use Singleton;
 
     /**
      * @var array
@@ -63,6 +66,14 @@ class RenderService
         return $this->currentView;
     }
 
+    public function getParentViews()
+    {
+        return $this->parentViews;
+    }
+
+    /**
+     * @return array
+     */
     public function getOptions()
     {
         return $this->options;
@@ -183,54 +194,6 @@ class RenderService
 
         // Revert to parent view
         $this->currentView = count($this->parentViews) > 0 ? array_pop($this->parentViews) : null;
-    }
-
-    /**
-     * Fetch an argument from the view scope
-     *
-     * @param string $query
-     * @param mixed $default
-     * @return mixed
-     */
-    public function argument(string $query, $default = null)
-    {
-        if (!isset($this->currentView)) {
-            return $default;
-        }
-
-        // Parse view hierarchy and look for query
-        $hierarchy = array_reverse(array_merge($this->parentViews, [$this->currentView]));
-
-        foreach ($hierarchy as $view) {
-            if ($view->hasArgument($query)) {
-                return $view->getArgument($query);
-            }
-        }
-
-        return $default;
-    }
-
-    /*
-     -------------------------------
-     Singleton
-     -------------------------------
-     */
-
-    /**
-     * @var RenderService
-     */
-    protected static $instance;
-
-    /**
-     * @return RenderService
-     */
-    public static function getInstance()
-    {
-        if (!isset(static::$instance)) {
-            static::$instance = new RenderService();
-        }
-
-        return static::$instance;
     }
 
 }

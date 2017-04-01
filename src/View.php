@@ -2,6 +2,8 @@
 
 namespace LiquidSoft\Render;
 
+use \Closure;
+
 class View
 {
 
@@ -24,6 +26,14 @@ class View
     {
         $this->filename = $filename;
         $this->arguments = $arguments;
+    }
+
+    /**
+     * @param array $arguments
+     */
+    public function with(array $arguments)
+    {
+        $this->arguments = array_merge($this->arguments, $arguments);
     }
 
     /**
@@ -123,6 +133,52 @@ class View
         } while (count($keys) > 0);
 
         return true;
+    }
+
+    /**
+     * Set an argument
+     *
+     * @param string $query
+     * @param mixed $value
+     */
+    public function setArgument(string $query, $value)
+    {
+        $current = &$this->arguments;
+        $keys = explode('.', $query);
+        $key = array_pop($keys);
+
+        // Create path
+        while (count($keys) > 0) {
+            $currentKey = array_shift($keys);
+
+            if (is_array($current)) {
+                if (!isset($current[$currentKey]) ||
+                    (!is_array($current[$currentKey]) && !is_object($current[$currentKey]))
+                ) {
+                    $current[$currentKey] = [];
+                }
+
+                $current = &$current[$currentKey];
+                continue;
+            }
+
+            if (is_object($current)) {
+                if (!isset($current->$currentKey) ||
+                    (!is_array($current->$currentKey) && !is_object($current->$currentKey))
+                ) {
+                    $current->$currentKey = [];
+                }
+
+                $current = &$current->$currentKey;
+            }
+        }
+
+        // Set value
+        if (is_array($current)) {
+            $current[$key] = $value;
+        } else if (is_object($current)) {
+            $current->$currentKey = $value;
+        }
     }
 
 }
