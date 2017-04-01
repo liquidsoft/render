@@ -31,6 +31,7 @@ class RenderService
     {
         $this->options = $options;
         $this->parentViews = [];
+        $this->viewMap = [];
     }
 
     /*
@@ -125,6 +126,36 @@ class RenderService
 
     /*
      -------------------------------
+     View mapping
+     -------------------------------
+     */
+
+    /**
+     * @var array
+     */
+    protected $viewMap;
+
+    /**
+     * @param string|array $query
+     * @param null $viewClass
+     * @return $this
+     */
+    public function map($query, $viewClass = null)
+    {
+        if (is_array($query)) {
+            foreach ($query as $q => $class) {
+                $this->map($q, $class);
+            }
+
+            return $this;
+        }
+
+        $this->viewMap[$query] = $viewClass;
+        return $this;
+    }
+
+    /*
+     -------------------------------
      Methods
      -------------------------------
      */
@@ -153,19 +184,15 @@ class RenderService
             throw new RenderException('View filename cannot be outside the source folder!');
         }
 
-        // Validate namespace
-        $namespace = $this->namespace;
+        // Determine class
+        $className = View::class;
 
-        if (!is_string($namespace)) {
-            throw new RenderException('View namespace is not set!');
-        }
+        if (isset($this->viewMap[$fileQuery])) {
+            if (!class_exists($this->viewMap[$fileQuery])) {
+                throw new RenderException(sprintf('Class `%s% cannot be found!', $this->viewMap[$fileQuery]));
+            }
 
-        // Get view class
-        $filename = substr($path, strlen($source));
-        $className = $namespace . '\\' . implode('\\', explode(DIRECTORY_SEPARATOR, basename($filename, '.php'))) . 'View';
-
-        if (!class_exists($className)) {
-            $className = View::class;
+            $className = $this->viewMap[$fileQuery];
         }
 
         // Create view

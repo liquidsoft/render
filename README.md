@@ -14,8 +14,6 @@ render()->setOptions([
     // Path to the view sources
     'source' => 'resources/views',
     
-    // View namespace (for extending view classes)
-    'namespace' => 'App\Views'
 ]);
 ```
 
@@ -63,8 +61,13 @@ if (argument()->has('title')) {
 ```
 
 ## Extending a view
-The views class can be extended for each of the views in the source folder.
-The classes must be located under the defined namespace and each folder must constitute a namespace node.
+The views class can be extended with and mapped to a specific view.
+
+```php
+render()->map('partials.header', HeaderView::class);
+render()->map('partials.header.brand', BrandView::class);
+```
+
 
 There are 2 hooks which can be extended:
 - beforeRender()
