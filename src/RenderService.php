@@ -176,12 +176,13 @@ class RenderService
         }
 
         // Determine path
+        $source = realpath($source);
         $filename = implode(DIRECTORY_SEPARATOR, explode('.', $fileQuery)) . '.php';
         $path = realpath($source . DIRECTORY_SEPARATOR . $filename);
 
         // Validate path
-        if (strpos($path, $source) !== 0) {
-            throw new RenderException('View filename cannot be outside the source folder!');
+        if (!$source || !$path || (strpos($path, $source) !== 0)) {
+            throw new RenderException(sprintf('Source file for view `%s` cannot be found!', $fileQuery));
         }
 
         // Determine class
