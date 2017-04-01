@@ -89,7 +89,7 @@ class View
         do {
             $currentKey = array_shift($keys);
 
-            if (is_array($current) && array_key_exists($current, $currentKey)) {
+            if (is_array($current) && array_key_exists($currentKey, $current)) {
                 $current = $current[$currentKey];
                 continue;
             }
@@ -118,7 +118,7 @@ class View
         do {
             $currentKey = array_shift($keys);
 
-            if (is_array($current) && array_key_exists($current, $currentKey)) {
+            if (is_array($current) && array_key_exists($currentKey, $current)) {
                 $current = $current[$currentKey];
                 continue;
             }
