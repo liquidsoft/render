@@ -15,7 +15,7 @@ trait Singleton
     public static function getInstance()
     {
         if (!isset(static::$instance)) {
-            static::$instance = new RenderService();
+            static::$instance = new static();
         }
 
         return static::$instance;
